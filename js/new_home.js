@@ -20,7 +20,7 @@ const createInnerHtml = () => {
         "<th>Department</th><th>Salary</th><th>Start Date</th>" +
         "<th>Actions</th>";
     let innerHtml = `${headerHtml}`;
-    let empPayrollList = createEmployeePayrollJSON();
+    //let empPayrollList = createEmployeePayrollJSON();
     for (const empPayrollData of empPayrollList) {
         innerHtml = `${innerHtml}
         <tr>
@@ -88,4 +88,16 @@ const createEmployeePayrollJSON = () => {
         }
     ]
     return empPayrollListLocal;
+}
+//UC1:
+const remove = (node) => {
+    let empPayrollData = empPayrollList.find(empData => empData._id == node._id);
+    if(!empPayrollData) return;
+    const index = empPayrollList
+                .map(empData => empData._id)
+                .indexOf(empPayrollData._id);
+    empPayrollList.splice(index,1);
+    localStorage.setItem("EmployeePayrollList",JSON.stringify(empPayrollList));
+    document.querySelector(".emp-count").textContent = empPayrollList.length;
+    createInnerHtml();
 }
