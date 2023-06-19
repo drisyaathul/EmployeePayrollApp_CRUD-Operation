@@ -59,34 +59,22 @@ class EmployeePayrollData{
     get startDate(){
         return this._startDate;
     }
-    set startDate(startDate){
-    // Check if the input is a valid date
-    const inputDate = new Date(startDate);
-    if (isNaN(inputDate.getTime())) {
-        throw new Error("Invalid date format. Please use yyyy-mm-dd format.");
+    set startDate(startDate) {
+        let now = new Date();
+        if (startDate > now) throw 'Start date is a Future date!';
+        var diff = Math.abs(now.getTime() - startDate.getTime());
+        if (diff / (1000 * 60 * 60 * 24) > 30)
+            throw 'Start date is beyond 30 Days';
+        this._startDate = startDate;    
     }
-        // Check if the date is not in the future
-    const currentDate = new Date();
-    if (inputDate > currentDate) {
-        throw new Error("Start date cannot be in the future.");
-    }
-
-    // Check if the date is within 30 days of joining
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(currentDate.getDate() - 30);
-    if (inputDate < this._joinDate || inputDate > currentDate) {
-        throw new Error("Start date should be within 30 days of joining.");
-    }
-    // Set the start date if all validation checks pass
-    this._startDate = inputDate;
-    }
-
     //method
-    toString(){
-    const options ={year :'numeric',month:'long',day:'numeric'}
-    const empDate= !this.startDate ? "undefined": 
-                    this.startDate.toLocaleDateString("en-US",options);
-    return "id=" +this.id+"name= "+this.name+", gender="+this.gender + ", profilePic=" +this.profilepic + 
-    ", department="+ this.department + ", salary="+this.salary+ ", startDate=" +empDate+", note="+this.note;
-}
+    toString()
+    {
+        const format = {year:'numeric', month:'long', day:'numeric'};
+        const date = this.startDate === undefined ? "undefined" :
+                     this.startDate.toLocaleDateString("en-US",format);
+        return "Id = "+this.id+", Name = "+this.name+", Gender = "+this.gender+", ProfilePic = "+this.profilePic+", Department = "+this.department+", Salary = "+this.salary+
+                ", StartDate = "+date+", Note = "+this.note;
+    }
+
 }
